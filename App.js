@@ -1,32 +1,33 @@
-import {StyleSheet, TextInput, View, Button, Text} from 'react-native';
+import {useState} from "react";
+import {StyleSheet, View} from 'react-native';
+import {AddListItem} from "./components/AddListItem";
+import {Items} from "./components/Items";
 
 export default function App() {
+    const [items, setItems] = useState(null);
+
+    const onPress = (text) => {
+        setItems([...(items || []), { text, key: Math.random().toString() }])
+    }
+
+    const onDelete = (key) => {
+        setItems(items.filter(item => item.key !== key))
+    }
+
     return (
         <View style={styles.container}>
-            <View style={styles.inputContainer}>
-                <TextInput style={styles.textInput} placeholder="Your course goal!"/>
-                <Button title="Add new item"/>
-            </View>
-            <View>
-                <Text>My todo list...</Text>
-            </View>
+            <AddListItem
+                onPress={onPress}
+            />
+            <Items items={items} onDelete={onDelete} />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 60
+        paddingVertical: 60,
+        paddingHorizontal: 20,
+        flex: 1
     },
-    inputContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        gap: 16
-    },
-    textInput: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        width: '70%',
-        padding: 6,
-    }
 });
